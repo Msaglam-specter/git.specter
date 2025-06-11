@@ -1,0 +1,24 @@
+[
+  {
+    "isim": "Kargo Cepli Pantolon",
+    "fiyat": "200",
+    "stok": "5",
+    "barkod": "sdsdfzs46888886",
+    "modelKodu": "KP-1245",
+    "stokKodu": "KP-1245_S",
+    "beden": "Small",
+    "renk": "Bej",
+    "resim": "C:\\Users\\sglmm\\OneDrive\\Masaüstü\\SİTE"
+  },
+  {
+    "isim": "Shut up T-shirt",
+    "fiyat": "200",
+    "stok": "5",
+    "barkod": "qw467898797764",
+    "modelKodu": "KT-1234",
+    "stokKodu": "KT-1234_s",
+    "beden": "Small",
+    "renk": "siyah",
+    "resim": ""
+  }
+]

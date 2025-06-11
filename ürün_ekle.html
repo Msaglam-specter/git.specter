@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+ <head>
+    <meta charset="UTF-8">
+    <title>Ürün Ekle - SPECTER</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+
+    </style>
+ </head>
+ <body>
+    <header>
+        <h1>Admin Paneli</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="producks.html">Ürünler</a></li>
+                <li><a href="orders.html">Siparişler</a></li>
+                <li><a href="users.html">Kullanıcılar</a></li>
+                <li><a href="settings.html">Ayarlar</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1 style="text-align:center;">Ürün Ekle</h1>
+        <form id="urunEkleForm">
+            <label>İsim <input type="text" name="isim" required></label>
+            <label>Fiyat <input type="text" name="fiyat" required placeholder="Örn: 199 TL"></label>
+            <label>Stok <input type="number" name="stok" required min="0"></label>
+            <label>Barkod <input type="text" name="barkod"></label>
+            <label>Model Kodu <input type="text" name="modelKodu"></label>
+            <label>Stok Kodu <input type="text" name="stokKodu"></label>
+            <label>Beden <input type="text" name="beden"></label>
+            <label>Renk <input type="text" name="renk"></label>
+            <label>Resim (URL veya dosya adı) <input type="text" name="resim"></label>
+            <button type="submit">Ürünü Ekle</button>
+            <div id="mesaj"></div>
+        </form>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 SPECTER. Tüm hakları saklıdır.</p>
+    </footer>
+
+  <script src="app.js"></script>
+ </body>
+</html>

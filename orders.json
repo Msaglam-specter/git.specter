@@ -1,0 +1,91 @@
+[
+  {
+    "sepet": [
+      {
+        "ad": "Kargo Cepli Bej Renk Pantolon",
+        "fiyat": "199 TL",
+        "resim": "kargocep.jpg",
+        "adet": 5
+      }
+    ],
+    "tarih": "2025-06-09T17:34:53.625Z"
+  },
+  {
+    "sepet": [
+      {
+        "ad": "Kargo Cepli Bej Renk Pantolon",
+        "fiyat": "199 TL",
+        "resim": "kargocep.jpg",
+        "adet": 6
+      }
+    ],
+    "tarih": "2025-06-09T18:20:15.992Z"
+  },
+  {
+    "sepet": [
+      {
+        "ad": "Kargo Cepli Bej Renk Pantolon_2",
+        "fiyat": "199 TL",
+        "resim": "kargocep.jpg",
+        "adet": 8
+      }
+    ],
+    "tarih": "2025-06-09T18:21:26.848Z"
+  },
+  {
+    "sepet": [
+      {
+        "ad": "Kargo Cepli Bej Renk Pantolon",
+        "fiyat": "199 TL",
+        "resim": "kargocep.jpg",
+        "adet": 3
+      },
+      {
+        "ad": "Kargo Cepli Bej Renk Pantolon_2",
+        "fiyat": "199 TL",
+        "resim": "kargocep.jpg",
+        "adet": 6
+      }
+    ],
+    "tarih": "2025-06-09T20:33:48.488Z"
+  },
+  {
+    "sepet": [
+      {
+        "ad": "Kargo Cepli Pantolon",
+        "fiyat": "200",
+        "resim": "C:UserssglmmOneDriveMasaüstüSİTE",
+        "adet": 5
+      }
+    ],
+    "tarih": "2025-06-10T05:52:45.041Z"
+  },
+  {
+    "sepet": [
+      {
+        "ad": "Shut up T-shirt",
+        "fiyat": "200",
+        "resim": "",
+        "adet": 6
+      }
+    ],
+    "tarih": "2025-06-10T12:51:21.659Z"
+  },
+  {
+    "sepet": [
+      {
+        "ad": "Shut up T-shirt",
+        "fiyat": "200",
+        "resim": "",
+        "adet": 2
+      },
+      {
+        "ad": "Kargo Cepli Pantolon",
+        "fiyat": "200",
+        "resim": "C:UserssglmmOneDriveMasaüstüSİTE",
+        "adet": 50
+      }
+    ],
+    "tarih": "2025-06-10T12:52:01.827Z"
+  }
+]

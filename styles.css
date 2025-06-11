@@ -1,0 +1,133 @@
+﻿body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background: #35424a;
+    color: #ffffff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+nav {
+    background: #35424a;
+    color: #ffffff;
+    padding: 10px 0;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex; /* Navigasyon elemanlarını yatay hizalar */
+    justify-content: center; /* Navigasyon elemanlarını ortalar */
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+nav ul li a:hover {
+    text-decoration: underline; /* Hover'da altı çizili yapar */
+}
+
+.container {
+    width: 80%;
+    margin: 20px auto;
+    background: #ffffff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Footer için sabit konumlandırma */
+footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background: #35424a; /* Header ile aynı veya benzer bir renk */
+    color: #ffffff;
+    text-align: center;
+    padding: 10px 0;
+    z-index: 100;
+    border-top: 1px solid #2a343d; /* Daha koyu bir üst kenarlık */
+}
+
+#orders-table, #producks-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: #fff;
+}
+#orders-table th, #orders-table td,
+#producks-table th, #producks-table td {
+    border: 1px solid #ddd;
+    padding: 8px 10px;
+    text-align: center;
+}
+#orders-table th, #producks-table th {
+    background: #f5f5f5;
+    font-weight: bold;
+}
+.btn {
+    background: #222;
+    color: #fff;
+    padding: 8px 18px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+}
+.btn:hover {
+    background: #444;
+}
+
+/* Form stilleri için tek bir tanım */
+form {
+    max-width: 500px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 24px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Daha belirgin bir gölge */
+}
+label {
+    display: block;
+    margin-top: 12px;
+    font-weight: bold;
+}
+input, select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 4px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    box-sizing: border-box; /* Padding ve border'ı genişliğe dahil eder */
+}
+button {
+    margin-top: 18px;
+    padding: 10px 24px;
+    background: #222;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+button:hover {
+    background: #444;
+}
+.success {
+    color: green;
+    margin-top: 12px;
+}
+.error {
+    color: red;
+    margin-top: 12px;
+}

@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ürün Düzenle - SPECTER</title>
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+    <header>
+        <h1 style="text-align:center;">Ürün Düzenle</h1>
+    </header>
+    <main>
+        <form id="urunDuzenleForm">
+            <label>İsim <input type="text" name="isim" required></label>
+            <label>Fiyat <input type="text" name="fiyat" required></label>
+            <label>Stok <input type="number" name="stok" required min="0"></label>
+            <label>Barkod <input type="text" name="barkod"></label>
+            <label>Model Kodu <input type="text" name="modelKodu"></label>
+            <label>Stok Kodu <input type="text" name="stokKodu"></label>
+            <label>Beden <input type="text" name="beden"></label>
+            <label>Renk <input type="text" name="renk"></label>
+            <label>Resim <input type="text" name="resim"></label>
+            <button type="submit">Kaydet</button>
+            <div id="mesaj"></div>
+        </form>
+    </main>
+   <script src="app.js"></script>
+</body>
+</html>

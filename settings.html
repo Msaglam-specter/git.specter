@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ayarlar - SPECTER</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Admin Paneli</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="producks.html">Ürünler</a></li>
+                <li><a href="orders.html">Siparişler</a></li>
+                <li><a href="users.html">Kullanıcılar</a></li>
+                <li><a href="settings.html">Ayarlar</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="general-settings">
+            <h2 style="text-align: center;">Genel Ayarlar</h2>
+            <p>Site ayarlarını buradan yönetin.</p>
+            <form>
+                <label for="siteTitle">Site Başlığı:</label>
+                <input type="text" id="siteTitle" name="siteTitle" value="SPECTER">
+
+                <label for="adminEmail">Yönetici E-postası:</label>
+                <input type="email" id="adminEmail" name="adminEmail" value="admin@specter.com">
+
+                <label for="currency">Para Birimi:</label>
+                <select id="currency" name="currency">
+                    <option value="TL">TL</option>
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                </select>
+
+                <button type="submit">Ayarları Kaydet</button>
+            </form>
+        </section>
+
+        <section id="security-settings" style="margin-top: 40px;">
+            <h2 style="text-align: center;">Güvenlik Ayarları</h2>
+            <p>Parola ve güvenlik ayarlarınızı güncelleyin.</p>
+            <form>
+                <label for="oldPassword">Eski Parola:</label>
+                <input type="password" id="oldPassword" name="oldPassword">
+
+                <label for="newPassword">Yeni Parola:</label>
+                <input type="password" id="newPassword" name="newPassword">
+
+                <label for="confirmPassword">Yeni Parola (Tekrar):</label>
+                <input type="password" id="confirmPassword" name="confirmPassword">
+
+                <button type="submit">Parolayı Değiştir</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 SPECTER. Tüm hakları saklıdır.</p>
+    </footer>
+    <script src="app.js"></script>
+</body>
+</html>
