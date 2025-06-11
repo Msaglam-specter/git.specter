@@ -5,8 +5,67 @@
     <title>Ürün Ekle - SPECTER</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-
+      /* Sizin eklediğiniz stil kodları buraya */
     </style>
+
+    <!-- ********************************************** -->
+    <!-- BAŞLANGIÇ: Firebase Kurulumu ve Başlatma Bölümü -->
+    <!-- BU KISIM app.js ÇALIŞMADAN ÖNCE YÜKLENMELİDİR -->
+    <!-- ********************************************** -->
+
+    <!-- 1. Firebase Core SDK'yı Yükle (Compat Versiyon) -->
+    <!-- Bu, tarayıcının temel Firebase fonksiyonlarını bilmesini sağlar -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+
+    <!-- 2. Firestore SDK'yı Yükle (Compat Versiyon) -->
+    <!-- Bu, tarayıcının Firestore (Veritabanı) fonksiyonlarını bilmesini sağlar -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+    <!-- NOT: Eğer Authentication, Storage vb. kullanacaksanız,
+             onların da compat SDK'sını buraya eklemeniz gerekir.
+             Örn: <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+             Şu an sadece Firestore için bu ikisi yeterli.
+    -->
+
+    <!-- 3. KENDİ Firebase Konfigürasyonunuzu Ekleyin ve Firebase'i Başlatın -->
+    <!-- Bu script bloğu, yukarıdaki SDK'lar yüklendikten sonra çalışmalı -->
+    <script>
+        // Bu object, sizin Firebase projenizin kimlik bilgileridir.
+        // Firebase Konsolundan aldığınız kod BUDUR.
+        const firebaseConfig = {
+          apiKey: "AIzaSyBxGu7lw0w8fvsLYPVyBMBeTkwneBrllyA", // <-- Sizin API Anahtarınız
+          authDomain: "git-specter-admin-paneli.firebaseapp.com", // <-- Sizin Yetkilendirme Alanınız
+          projectId: "git-specter-admin-paneli", // <-- Sizin Proje ID'niz
+          storageBucket: "git-specter-admin-paneli.firebasestorage.app", // <-- Sizin Storage Alanınız
+          messagingSenderId: "974606404880", // <-- Sizin Mesajlaşma Gönderici ID'niz
+          appId: "1:974606404880:web:9c4f52286c409b1c42a995", // <-- Sizin Uygulama ID'niz
+          measurementId: "G-CDRTPJ7C9Y" // <-- Analytics kullanıyorsanız bu kalsın, yoksa silebilirsiniz
+        };
+
+        // Firebase Uygulamasını Başlat
+        // Bu kontrol, sayfanın birden çok kez yüklenmesi durumunda hata vermesini engeller
+        if (!firebase.apps.length) {
+           firebase.initializeApp(firebaseConfig);
+           console.log("Firebase başarıyla başlatıldı!"); // Konsola yazdırıp kontrol edebiliriz
+        } else {
+           console.log("Firebase zaten başlatılmıştı.");
+        }
+
+        // Firestore veritabanı servisine erişmek için bir referans oluşturun
+        // Bu 'db' değişkeni artık bu scriptten sonra yüklenen tüm kodlarda (yani app.js'de) kullanılabilir.
+        const db = firebase.firestore();
+        console.log("Firestore 'db' objesi kullanıma hazır."); // Konsola yazdırıp kontrol edebiliriz
+
+    </script>
+    <!-- ******************************************** -->
+    <!-- SON: Firebase Kurulumu ve Başlatma Bölümü -->
+    <!-- ******************************************** -->
+
+    <!-- 4. EN SONDA Sizin Kendi app.js dosyanız -->
+    <!-- app.js dosyası artık yukarıda tanımlanan 'firebase' ve 'db' objelerini kullanabilir -->
+    <script src="app.js"></script>
+
+
  </head>
  <body>
     <header>
@@ -37,47 +96,9 @@
             <button type="submit">Ürünü Ekle</button>
             <div id="mesaj"></div>
         </form>
-    </main>
-
+</main>
     <footer>
-        <p>&copy; 2025 SPECTER. Tüm hakları saklıdır.</p>
+        <p>&copy; 2025 SPECTER Admin Paneli</p>
     </footer>
-<!-- Firebase Core SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-
-<!-- Firestore SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-
-<!-- KENDİ Firebase Konfigürasyonunuz VE Başlatma Kodunuz -->
- <!--İhtiyacınız olan fonksiyonları ihtiyaç duyduğunuz SDK'lardan içe aktarın -->
-<script>
-// Import the functions you need from the SDKs you need
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyBxGu7lw0w8fvsLYPVyBMBeTkwneBrllyA",
-  authDomain: "git-specter-admin-paneli.firebaseapp.com",
-  projectId: "git-specter-admin-paneli",
-  storageBucket: "git-specter-admin-paneli.firebasestorage.app",
-  messagingSenderId: "974606404880",
-  appId: "1:974606404880:web:9c4f52286c409b1c42a995",
-  measurementId: "G-CDRTPJ7C9Y"
-};
-if (!firebase.apps.length) {
-       firebase.initializeApp(firebaseConfig);
-    }
-
-
-// Initialize Firebase
-  // Firestore'u kullanmaya hazır hale getirin
-  const db = firebase.firestore();
-</script>
-
-<!-- EN SONDA Sizin Kendi app.js dosyanız -->
-<script src="app.js"></script>
-
- </body>
-</html> 
+    </body>
+    </html>
