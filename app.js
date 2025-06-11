@@ -1,11 +1,11 @@
 ﻿const firebaseConfig = {
-  apiKey: "AIzaSyC...", // Size özel API anahtarınız
+  apiKey: "AIzaSyBxGu7lw0w8fvsLYPVyBMBeTkwneBrllyA", // Size özel API anahtarınız
   authDomain: "git-specter-admin-paneli.firebaseapp.com", // Projenizin kimlik doğrulama alanı
   projectId: "git-specter-admin-paneli", // Projenizin ID'si (bu zaten doğru olmalı)
-  storageBucket: "git-specter-admin-paneli.appspot.com", // Storage Bucket adresi
-  messagingSenderId: "...", // FCM Sender ID
-  appId: "1:974606404880:web:...", // Web uygulamanızın benzersiz ID'si
-  measurementId: "G-..." // (Eğer Analytics eklediyseniz bu da olabilir)
+  storageBucket: "git-specter-admin-paneli.firebasestorage.app", // Storage Bucket adresi
+  messagingSenderId: "974606404880", // FCM Sender ID
+  appId: "1:974606404880:web:9c4f52286c409b1c42a995", // Web uygulamanızın benzersiz ID'si
+  measurementId: "G-CDRTPJ7C9Y" // (Eğer Analytics eklediyseniz bu da olabilir)
 };
 
 firebase.initializeApp(firebaseConfig);
