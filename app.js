@@ -1,4 +1,4 @@
-﻿// Firebase başlatma (bunu kendi config’inle doldur)
+﻿/* Firebase başlatma (bunu kendi config’inle doldur)*/
 const firebaseConfig = {
   // senin firebase config'in buraya gelecek
 };
