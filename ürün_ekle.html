@@ -42,7 +42,35 @@
     <footer>
         <p>&copy; 2025 SPECTER. Tüm hakları saklıdır.</p>
     </footer>
+<!-- Firebase Core SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 
+<!-- Firestore SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<!-- Sonra da kendi Firebase konfigürasyonunuz ve başlatma kodunuz gelmeli -->
+<script>
+  const firebaseConfig = {
+    apiKey: "...",
+    authDomain: "...",
+    projectId: "git-specter-admin-paneli",
+    storageBucket: "...",
+    messagingSenderId: "...",
+    appId: "..."
+  };
+
+  // Firebase'i başlat
+  // Zaten başlatıldıysa tekrar başlatmaz (kontrol ekleyebilirsiniz, ama compat SDK genellikle sorun çıkarmaz)
+   if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+   }
+
+
+  // Firestore'u hazırla
+  const db = firebase.firestore(); // db değişkenini global veya app.js'in erişebileceği bir yerde tanımlayın
+</script>
+
+<!-- VE İŞTE EN ÖNEMLİSİ: Sizin app.js dosyanız EN SONDA olmalı -->
   <script src="app.js"></script>
  </body>
 </html>
