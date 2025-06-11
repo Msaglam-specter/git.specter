@@ -66,6 +66,10 @@ const firebaseConfig = {
   appId: "1:974606404880:web:9c4f52286c409b1c42a995",
   measurementId: "G-CDRTPJ7C9Y"
 };
+if (!firebase.apps.length) {
+       firebase.initializeApp(firebaseConfig);
+    }
+
 
 // Initialize Firebase
   // Firestore'u kullanmaya hazır hale getirin
