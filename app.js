@@ -1,4 +1,5 @@
-﻿const firebaseConfig = {
+﻿
+const firebaseConfig = {
   apiKey: "AIzaSyBxGu7lw0w8fvsLYPVyBMBeTkwneBrllyA", // Size özel API anahtarınız
   authDomain: "git-specter-admin-paneli.firebaseapp.com", // Projenizin kimlik doğrulama alanı
   projectId: "git-specter-admin-paneli", // Projenizin ID'si (bu zaten doğru olmalı)
