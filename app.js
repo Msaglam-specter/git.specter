@@ -1,4 +1,4 @@
-﻿
+﻿/*
 const firebaseConfig = {
   apiKey: "AIzaSyBxGu7lw0w8fvsLYPVyBMBeTkwneBrllyA", // Size özel API anahtarınız
   authDomain: "git-specter-admin-paneli.firebaseapp.com", // Projenizin kimlik doğrulama alanı
@@ -11,7 +11,7 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-
+*/
 /* orders.html için */
 document.addEventListener('DOMContentLoaded', () => {
     const ordersTable = document.querySelector('#orders-table tbody');
