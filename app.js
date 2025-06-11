@@ -1,11 +1,11 @@
 ﻿/* Firebase başlatma (bunu kendi config’inle doldur)*/
 const firebaseConfig = {
-  // senin firebase config'in buraya gelecek
+  /* senin firebase config'in buraya gelecek*/
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// orders.html için
+/* orders.html için */
 document.addEventListener('DOMContentLoaded', () => {
     const ordersTable = document.querySelector('#orders-table tbody');
     if (ordersTable) {
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// producks.html için (Firestore'dan okuma)
+/* producks.html için (Firestore'dan okuma)*/
 document.addEventListener('DOMContentLoaded', () => {
     const producksTable = document.querySelector('#producks-table tbody');
     if (producksTable) {
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Ürün silme fonksiyonu
+/* Ürün silme fonksiyonu*/
 function deleteProduct(produckId) {
     db.collection("products").doc(produckId).delete()
         .then(() => {
@@ -110,7 +110,7 @@ function deleteProduct(produckId) {
         });
 }
 
-// urunEkle.html için
+/* urunEkle.html için*/
 const urunEkleForm = document.getElementById('urunEkleForm');
 if (urunEkleForm) {
     urunEkleForm.addEventListener('submit', function(e) {
@@ -141,7 +141,7 @@ if (urunEkleForm) {
     });
 }
 
-// urun_düzenle.html için
+/* urun_düzenle.html için*/
 const urunDuzenleForm = document.getElementById('urunDuzenleForm');
 if (urunDuzenleForm) {
     const mesajElement = document.getElementById('mesaj');
