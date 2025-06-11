@@ -1,6 +1,13 @@
 ﻿const firebaseConfig = {
-  /* senin firebase config'in buraya gelecek*/
+  apiKey: "AIzaSyC...", // Size özel API anahtarınız
+  authDomain: "git-specter-admin-paneli.firebaseapp.com", // Projenizin kimlik doğrulama alanı
+  projectId: "git-specter-admin-paneli", // Projenizin ID'si (bu zaten doğru olmalı)
+  storageBucket: "git-specter-admin-paneli.appspot.com", // Storage Bucket adresi
+  messagingSenderId: "...", // FCM Sender ID
+  appId: "1:974606404880:web:...", // Web uygulamanızın benzersiz ID'si
+  measurementId: "G-..." // (Eğer Analytics eklediyseniz bu da olabilir)
 };
+
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
