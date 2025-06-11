@@ -1,5 +1,4 @@
-﻿/* Firebase başlatma (bunu kendi config’inle doldur)*/
-const firebaseConfig = {
+﻿const firebaseConfig = {
   /* senin firebase config'in buraya gelecek*/
 };
 firebase.initializeApp(firebaseConfig);
