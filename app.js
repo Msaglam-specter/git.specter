@@ -105,20 +105,19 @@
             });
     }
 
-    // === ÜRÜN EKLEME BÖLÜMÜ ===
+        // === ÜRÜN EKLEME BÖLÜMÜ ===
     const urunEkleForm = document.getElementById('urunEkleForm');
     if (urunEkleForm) {
         urunEkleForm.addEventListener('submit', function(e) {
             e.preventDefault();
             const form = e.target;
-            const mesajElement = document.getElementById('mesaj');
+            const mesajElement = document.getElementById('mesaj'); // Mesaj elementi
 
-            // Formdan değerleri al ve sayısal olanları dönüştür
+            // ... (validasyon kodları aynı kalacak) ...
             const isim = form.isim.value.trim();
             const fiyat = parseFloat(form.fiyat.value);
             const stok = parseInt(form.stok.value, 10);
 
-            // Basit doğrulama
             if (!isim) {
                 mesajElement.innerHTML = '<span class="error">Ürün ismi boş bırakılamaz.</span>';
                 return;
@@ -131,8 +130,11 @@
                 mesajElement.innerHTML = '<span class="error">Geçerli bir stok miktarı giriniz.</span>';
                 return;
             }
+            // ... (validasyon sonu) ...
+
 
             const data = {
+                // ... (veri objesi aynı kalacak) ...
                 isim: isim,
                 fiyat: fiyat, // Sayısal olarak
                 stok: stok,   // Sayısal olarak
@@ -148,19 +150,38 @@
             // Butonu geçici olarak devre dışı bırak ve mesajı temizle
             const submitButton = form.querySelector('button[type="submit"]');
             submitButton.disabled = true;
-            mesajElement.innerHTML = 'Ekleniyor...';
+            mesajElement.innerHTML = 'Ekleniyor...'; // Mesaj gösteriliyor
 
             db.collection("products").add(data)
                 .then((docRef) => {
-                    mesajElement.innerHTML = '<span class="success">Ürün başarıyla eklendi!</span>';
-                    form.reset();
+                    // Başarı durumunda yapılacaklar:
+                    console.log("Firestore ekleme başarılı! Doküman ID:", docRef.id);
+
+                    // 1. Başarı mesajını göster
+                    mesajElement.innerHTML = '<span class="success">Ürün başarıyla eklendi! Ürünler sayfasına yönlendiriliyorsunuz...</span>';
+                    console.log("Başarı mesajı gösterildi.");
+
+                    // 2. Formu temizlemek yerine belirli bir süre sonra yönlendirme yap
+                    // Kısa bir bekleme eklemek, kullanıcının başarı mesajını görmesini sağlar.
+                    setTimeout(() => {
+                        window.location.href = 'producks.html'; // Ürünler sayfasının URL'si
+                    }, 2000); // 2 saniye (2000 milisaniye) bekleyip yönlendir
+
+                    // form.reset(); // <-- BU SATIRI KALDIRIN VEYA YORUM SATIRI YAPIN
+
                 })
                 .catch((error) => {
-                    mesajElement.innerHTML = '<span class="error">Ürün eklenirken bir hata oluştu!</span>';
+                    // Hata durumunda yapılacaklar (şu anki kodunuzdaki gibi kalabilir):
                     console.error("Firebase'e ürün ekleme hatası: ", error);
+                    mesajElement.innerHTML = '<span class="error">Ürün eklenirken bir hata oluştu!</span>';
+                    // Hata durumunda yönlendirme yapmıyoruz, kullanıcı formda kalıp hatayı görür.
                 })
                 .finally(() => {
-                    submitButton.disabled = false; // Butonu tekrar aktif et
+                    // İşlem tamamlandığında (başarı veya hata), butonu tekrar aktif et
+                    // Başarı durumunda yönlendirme olacağı için bu satır çalışsa da fark etmez,
+                    // ama hata durumunda kullanıcının tekrar denemesi için butonun aktif olması önemli.
+                    submitButton.disabled = false;
+                     console.log("Firestore işlemi tamamlandı.");
                 });
         });
     }
