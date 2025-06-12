@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .then((querySnapshot) => {
                 ordersTable.innerHTML = '';
                 if (querySnapshot.empty) {
-                    ordersTable.innerHTML = '<tr><td colspan="6">Henüz sipariş yok.</td></tr>';
+                    ordersTable.innerHTML = <tr><td colspan="6">Henüz sipariş yok.</td></tr>;
                     return;
                 }
                 let i = 0;
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     let adres = order.adres || '-';
                     let tarih = order.tarih ? new Date(order.tarih.seconds * 1000).toLocaleString('tr-TR') : '-';
                     let adetToplam = order.sepet.reduce((a, u) => a + (u.adet || 1), 0);
-                    ordersTable.innerHTML += `
+                    ordersTable.innerHTML += 
                         <tr>
                             <td>${i + 1}</td>
                             <td>${tarih}</td>
@@ -44,12 +44,12 @@ document.addEventListener('DOMContentLoaded', () => {
                             <td>${toplam} TL</td>
                             <td>${adres}</td>
                         </tr>
-                    `;
+                    ;
                     i++;
                 });
             })
             .catch((error) => {
-                ordersTable.innerHTML = '<tr><td colspan="6">Siparişler yüklenemedi!</td></tr>';
+                ordersTable.innerHTML = <tr><td colspan="6">Siparişler yüklenemedi!</td></tr>;
                 console.error(error);
             });
     }
@@ -63,14 +63,14 @@ document.addEventListener('DOMContentLoaded', () => {
             .then((querySnapshot) => {
                 producksTable.innerHTML = '';
                 if (querySnapshot.empty) {
-                    producksTable.innerHTML = '<tr><td colspan="10">Henüz ürün eklenmemiş.</td></tr>';
+                    producksTable.innerHTML = <tr><td colspan="10">Henüz ürün eklenmemiş.</td></tr>;
                     return;
                 }
                 let i = 0;
                 querySnapshot.forEach((doc) => {
                     const produck = doc.data();
                     const produckId = doc.id;
-                    producksTable.innerHTML += `
+                    producksTable.innerHTML += 
                         <tr>
                             <td>${i + 1}</td>
                             <td>${produck.isim || '-'}</td>
@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <button class="btn btn-danger sil-btn" data-id="${produckId}" style="padding:4px 10px;font-size:14px; margin-left: 5px;">Sil</button>
                             </td>
                         </tr>
-                    `;
+                    ;
                     i++;
                 });
                 producksTable.querySelectorAll('.sil-btn').forEach(button => {
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             })
             .catch((error) => {
-                producksTable.innerHTML = '<tr><td colspan="10">Ürünler yüklenemedi.</td></tr>';
+                producksTable.innerHTML = <tr><td colspan="10">Ürünler yüklenemedi.</td></tr>;
                 console.error(error);
             });
     }
@@ -192,10 +192,10 @@ if (urunDuzenleForm) {
             };
             db.collection("products").doc(produckId).update(data)
                 .then(() => {
-                    mesajElement.innerHTML = '<span class="success">Ürün başarıyla güncellendi!</span>';
+                    mesajElement.innerHTML = <span class="success">Ürün başarıyla güncellendi!</span>;
                 })
                 .catch((error) => {
-                    mesajElement.innerHTML = '<span class="error">Ürün güncellenirken bir hata oluştu!</span>';
+                    mesajElement.innerHTML = <span class="error">Ürün güncellenirken bir hata oluştu!</span>;
                     console.error(error);
                 });
         });
