@@ -59,7 +59,7 @@
     // === ÜRÜNLER LİSTELEME BÖLÜMÜ ===
     const producksTable = document.querySelector('#producks-table tbody');
     if (producksTable) {
-        db.collection("products").get()
+        db.collection("producks").get()
             .then((querySnapshot) => {
                 producksTable.innerHTML = ''; // Önce temizle
                 if (querySnapshot.empty) {
@@ -94,7 +94,7 @@
                     button.addEventListener('click', function() {
                         const idToDelete = this.getAttribute('data-id');
                         if (confirm('Bu ürünü silmek istediğinize emin misiniz?')) {
-                            deleteProduct(idToDelete);
+                            deleteProduck(idToDelete);
                         }
                     });
                 });
@@ -152,7 +152,7 @@
             submitButton.disabled = true;
             mesajElement.innerHTML = 'Ekleniyor...'; // Mesaj gösteriliyor
 
-            db.collection("products").add(data)
+            db.collection("producks").add(data)
                 .then((docRef) => {
                     // Başarı durumunda yapılacaklar:
                     console.log("Firestore ekleme başarılı! Doküman ID:", docRef.id);
@@ -197,7 +197,7 @@
 
         if (produckId) {
             if(mesajElement) mesajElement.innerHTML = 'Ürün bilgileri yükleniyor...';
-            db.collection("products").doc(produckId).get()
+            db.collection("producks").doc(produckId).get()
                 .then((doc) => {
                     if (doc.exists) {
                         const mevcutUrun = doc.data();
