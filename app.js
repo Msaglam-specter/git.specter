@@ -259,7 +259,7 @@
                 if(submitButton) submitButton.disabled = true;
                 if(mesajElement) mesajElement.innerHTML = 'Güncelleniyor...';
 
-                db.collection("products").doc(produckId).update(data)
+                db.collection("producks").doc(produckId).update(data)
                     .then(() => {
                         if(mesajElement) mesajElement.innerHTML = '<span class="success">Ürün başarıyla güncellendi!</span>';
                     })
@@ -279,14 +279,14 @@
 }); // DOMContentLoaded sonu
 
 // === ÜRÜN SİLME FONKSİYONU (GLOBAL SCOPE'DA) ===
-function deleteProduct(produckId) {
+function deleteProduck(produckId) {
     // db değişkeni global olduğu için burada erişilebilir.
     if (!db) {
         console.error("Firestore 'db' objesi bulunamadı!");
         alert("Veritabanı bağlantı hatası, silme işlemi yapılamadı.");
         return;
     }
-    db.collection("products").doc(produckId).delete()
+    db.collection("producks").doc(produckId).delete()
         .then(() => {
             alert("Ürün başarıyla silindi!");
             window.location.reload(); // Sayfayı yenileyerek listeyi güncelle
