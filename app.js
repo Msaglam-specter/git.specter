@@ -138,11 +138,11 @@ if (urunEkleForm) {
         };
         db.collection("products").add(data)
             .then((docRef) => {
-                mesajElement.innerHTML = '<span class="success">Ürün başarıyla eklendi!</span>';
+                mesajElement.innerHTML = <span class="success">Ürün başarıyla eklendi!</span>;
                 form.reset();
             })
             .catch((error) => {
-                mesajElement.innerHTML = '<span class="error">Ürün eklenirken bir hata oluştu!</span>';
+                mesajElement.innerHTML = <span class="error">Ürün eklenirken bir hata oluştu!</span>;
                 console.error(error);
             });
     });
