@@ -187,41 +187,48 @@
     }
 
     // === ÜRÜN DÜZENLEME BÖLÜMÜ ===
-    const urunDuzenleForm = document.getElementById('urunDuzenleForm');
-    if (urunDuzenleForm) {
-        const mesajElement = document.getElementById('mesaj'); // Bu form için ayrı bir mesaj elementi olabilir veya aynı ID'li global bir element
-        const urlParams = new URLSearchParams(window.location.search);
-        const produckId = urlParams.get('id');
-        const submitButton = urunDuzenleForm.querySelector('button[type="submit"]');
+       const producksTable = document.querySelector('#producks-table tbody');
+    if (producksTable) {
+        // db.collection("producks").get() // <-- Burayı onSnapshot ile değiştiriyoruz
+        // .then((querySnapshot) => {    // <-- Burayı onSnapshot callback'i ile değiştiriyoruz
 
+        // Gerçek zamanlı dinleyici ekle
+        // Firestore'daki "producks" koleksiyonundaki değişiklikleri dinle
+        db.collection("producks").onSnapshot((querySnapshot) => {
+            console.log("Firestore'dan ürünler güncellendi. Toplam ürün:", querySnapshot.size); // Log ekleyebiliriz
+            producksTable.innerHTML = ''; // Önce tabloyu temizle
 
-        if (produckId) {
-            if(mesajElement) mesajElement.innerHTML = 'Ürün bilgileri yükleniyor...';
-            db.collection("producks").doc(produckId).get()
-                .then((doc) => {
-                    if (doc.exists) {
-                        const mevcutUrun = doc.data();
-                        urunDuzenleForm.isim.value = mevcutUrun.isim || '';
-                        urunDuzenleForm.fiyat.value = mevcutUrun.fiyat !== undefined ? mevcutUrun.fiyat : '';
-                        urunDuzenleForm.stok.value = mevcutUrun.stok !== undefined ? mevcutUrun.stok : '';
-                        urunDuzenleForm.barkod.value = mevcutUrun.barkod || '';
-                        urunDuzenleForm.modelKodu.value = mevcutUrun.modelKodu || '';
-                        urunDuzenleForm.stokKodu.value = mevcutUrun.stokKodu || '';
-                        urunDuzenleForm.beden.value = mevcutUrun.beden || '';
-                        urunDuzenleForm.renk.value = mevcutUrun.renk || '';
-                        urunDuzenleForm.resim.value = mevcutUrun.resim || '';
-                        if(mesajElement) mesajElement.innerHTML = ''; // Yükleme başarılı, mesajı temizle
-                    } else {
-                        if(mesajElement) mesajElement.innerHTML = '<span class="error">Ürün bulunamadı!</span>';
-                        if(submitButton) submitButton.disabled = true; // Ürün yoksa formu göndermeyi engelle
-                    }
-                })
-                .catch((error) => {
-                    if(mesajElement) mesajElement.innerHTML = '<span class="error">Ürün bilgileri alınırken hata oluştu!</span>';
-                    console.error("Ürün bilgilerini alma hatası: ", error);
-                    if(submitButton) submitButton.disabled = true;
-                });
+            if (querySnapshot.empty) {
+                producksTable.innerHTML = '<tr><td colspan="10">Henüz ürün eklenmemiş.</td></tr>';
+                 console.log("Ürün koleksiyonu boş."); // Log ekleyebiliriz
+                // Sil butonlarına event listener ekleme kısmını burada yapmaya gerek yok,
+                // çünkü hiç ürün yoksa buton da olmaz.
+                return;
+            }
 
+            let i = 0;
+            querySnapshot.forEach((doc) => {
+                const produck = doc.data();
+                const produckId = doc.id;
+                producksTable.innerHTML += `
+                    <tr>
+                        <td>${i + 1}</td>
+                        <td>${produck.isim || '-'}</td>
+                        <td>${produck.fiyat !== undefined ? produck.fiyat + ' TL' : '-'}</td>
+                        <td>${produck.stok !== undefined ? produck.stok : '-'}</td>
+                        <td>${produck.barkod || '-'}</td>
+                        <td>${produck.modelKodu || '-'}</td>
+                        <td>${produck.stokKodu || '-'}</td>
+                        <td>${produck.beden || '-'}</td>
+                        <td>${produck.renk || '-'}</td>
+                        <td>
+                            <a href="ürün_düzenle.html?id=${produckId}" class="btn" style="padding:4px 10px;font-size:14px;">Düzenle</a>
+                            <button class="btn btn-danger sil-btn" data-id="${produckId}" style="padding:4px 10px;font-size:14px; margin-left: 5px;">Sil</button>
+                        </td>
+                    </tr>
+                `;
+                i++;
+            });
             urunDuzenleForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 const form = e.target;
