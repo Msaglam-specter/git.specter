@@ -1,18 +1,10 @@
 ﻿/* 15.06.2025(02:25)*/
 // Firestore 'db' referansının HTML içinde global olarak tanımlandığı varsayılıyor.
-// Örneğin: <script src="...firebase-app.js"></script>
-// <script src="...firebase-firestore.js"></script>
-// <script>
-//   // Firebase projenizin yapılandırması
-//   const firebaseConfig = { ... };
-//   firebase.initializeApp(firebaseConfig);
-//   const db = firebase.firestore(); // db global olarak tanımlandı
-// </script>
 // Eğer 'db' global değilse, DOMContentLoaded içinde tanımlanması gerekebilir.
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Firebase db referansı HTML'de global olarak tanımlandığı için burada tekrar almaya gerek yok.
-    // const db = firebase.firestore(); // Bu satıra gerek yok.
+    // Firebase Firestore referansını burada tanımlayın
+    const db = firebase.firestore();
 
     // === SİPARİŞLER BÖLÜMÜ ===
     const ordersTable = document.querySelector('#orders-table tbody');
