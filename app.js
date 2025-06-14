@@ -1,4 +1,5 @@
-﻿// Firestore 'db' referansının HTML içinde global olarak tanımlandığı varsayılıyor.
+﻿/* 15.06.2025(02:25)*/
+// Firestore 'db' referansının HTML içinde global olarak tanımlandığı varsayılıyor.
 // Örneğin: <script src="...firebase-app.js"></script>
 // <script src="...firebase-firestore.js"></script>
 // <script>
