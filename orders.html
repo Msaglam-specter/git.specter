@@ -5,6 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SİPARİŞLER- SPECTER</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- Firebase App (Çekirdek) SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <!-- Firebase Firestore SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <!-- Firebase Yapılandırması ve Başlatma -->
+    <script>
+      // Web uygulamanızın Firebase yapılandırması (admin panelinizdekiyle aynı)
+      const firebaseConfig = {
+        apiKey: "AIzaSyBxGu7lw0w8fvsLYPVyBMBeTkwneBrllyA",
+        authDomain: "git-specter-admin-paneli.firebaseapp.com",
+        projectId: "git-specter-admin-paneli",
+        storageBucket: "git-specter-admin-paneli.firebasestorage.app", // Eğer storage kullanmıyorsanız bu satır isteğe bağlıdır.
+        messagingSenderId: "974606404880",
+        appId: "1:974606404880:web:9c4f52286c409b1c42a995"
+      };
+      // Firebase'i başlat
+      firebase.initializeApp(firebaseConfig);
+    </script>
 </head>
 <body>
     <header>
@@ -44,7 +63,7 @@
           <p>&copy; 2025 SPECTER. Tüm hakları saklıdır.</p>
         </nav>
     </footer>
-    <script src="app.js"></script>
+    <script defer src="app.js"></script>
    
 </body>
 </html>
