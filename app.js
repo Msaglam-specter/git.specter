@@ -1,5 +1,5 @@
-﻿/* 15.06.2025(02:25)*/
-// Firestore 'db' referansının HTML içinde global olarak tanımlandığı varsayılıyor.
+﻿/* 15.06.2025(14:31)*/
+// Firestore 'db' referansının HTML içinde global olarak tanımlandığı varsayılıyor
 // Eğer 'db' global değilse, DOMContentLoaded içinde tanımlanması gerekebilir.
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -8,17 +8,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // === SİPARİŞLER BÖLÜMÜ ===
     const ordersTable = document.querySelector('#orders-table tbody');
+    let unsubscribeOrders = null; // Sipariş dinleyicisini durdurmak için referans
+
     if (ordersTable) {
-        db.collection("orders").orderBy("tarih", "desc").get() // Siparişler için şimdilik get() kullanılıyor, tarihe göre sıralandı
-            .then((querySnapshot) => {
+        unsubscribeOrders = db.collection("orders").orderBy("tarih", "desc").onSnapshot(
+            (querySnapshot) => { // Başarılı veri alımı callback'i
+                console.log("Firestore'dan siparişler güncellendi. Toplam sipariş:", querySnapshot.size);
                 ordersTable.innerHTML = ''; // Önce temizle
+
                 if (querySnapshot.empty) {
-                    ordersTable.innerHTML = '<tr><td colspan="6">Henüz sipariş yok.</td></tr>';
+                    ordersTable.innerHTML = '<tr><td colspan="8">Henüz sipariş yok.</td></tr>';
                     return;
                 }
+
                 let i = 0;
                 querySnapshot.forEach((doc) => {
                     const order = doc.data();
+                    const orderId = doc.id;
                     let toplam = 0;
                     let urunlerHtml = '';
                     if (order.sepet && Array.isArray(order.sepet)) {
@@ -36,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     let adres = order.adres || '-';
                     let tarih = order.tarih && order.tarih.seconds ? new Date(order.tarih.seconds * 1000).toLocaleString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '-';
+                    let durum = order.durum || 'Bekliyor'; // Sipariş durumu
                     let adetToplam = 0;
                     if (order.sepet && Array.isArray(order.sepet)) {
                        adetToplam = order.sepet.reduce((acc, u) => acc + (u.adet || 1), 0);
@@ -49,16 +56,65 @@ document.addEventListener('DOMContentLoaded', () => {
                             <td>${adetToplam}</td>
                             <td>${toplam.toLocaleString('tr-TR')} TL</td>
                             <td>${adres}</td>
+                            <td><span class="status-${durum.toLowerCase()}">${durum}</span></td>
+                            <td>
+                                ${durum === 'Bekliyor' ? `
+                                    <button class="btn btn-success approve-order-btn" data-id="${orderId}" style="padding:4px 8px;font-size:12px;">Onayla</button>
+                                    <button class="btn btn-danger reject-order-btn" data-id="${orderId}" style="padding:4px 8px;font-size:12px; margin-left: 5px;">Reddet</button>
+                                ` : durum === 'Onaylandı' ? '<span class="text-success">Onaylandı</span>' : '<span class="text-danger">Reddedildi</span>'}
+                            </td>
                         </tr>
                     `;
                     i++;
                 });
-            })
-            .catch((error) => {
-                ordersTable.innerHTML = '<tr><td colspan="6">Siparişler yüklenemedi! Bir hata oluştu.</td></tr>';
+
+                // Onaylama butonlarına event listener ekle (HTML güncellendikten sonra)
+                ordersTable.querySelectorAll('.approve-order-btn').forEach(button => {
+                    button.onclick = function() {
+                        const orderIdToApprove = this.getAttribute('data-id');
+                        if (confirm(`Siparişi onaylamak istediğinize emin misiniz?`)) {
+                            updateOrderStatus(orderIdToApprove, 'Onaylandı');
+                        }
+                    };
+                });
+
+                // Reddetme butonlarına event listener ekle (HTML güncellendikten sonra)
+                ordersTable.querySelectorAll('.reject-order-btn').forEach(button => {
+                    button.onclick = function() {
+                        const orderIdToReject = this.getAttribute('data-id');
+                        if (confirm(`Siparişi reddetmek istediğinize emin misiniz?`)) {
+                            updateOrderStatus(orderIdToReject, 'Reddedildi');
+                        }
+                    };
+                });
+            },
+            (error) => { // Hata callback'i
+                ordersTable.innerHTML = '<tr><td colspan="8">Siparişler yüklenemedi! Bir hata oluştu.</td></tr>';
                 console.error("Siparişleri yükleme hatası: ", error);
-            });
+            }
+        );
+
+        // Sayfa kapatıldığında veya değiştirildiğinde sipariş dinleyicisini durdur
+        window.addEventListener('beforeunload', () => {
+            if (unsubscribeOrders) {
+                unsubscribeOrders();
+                console.log("Siparişler dinleyicisi durduruldu.");
+            }
+        });
+
+        // Sipariş Durumunu Güncelleme Fonksiyonu
+        function updateOrderStatus(orderId, newStatus) {
+            if (!orderId || !newStatus) {
+                console.error("Sipariş ID'si veya yeni durum belirtilmedi.");
+                alert("Sipariş durumu güncellenirken bir hata oluştu.");
+                return;
+            }
+            db.collection("orders").doc(orderId).update({ durum: newStatus })
+                .then(() => console.log(`Sipariş ${orderId} durumu güncellendi: ${newStatus}`))
+                .catch(error => console.error("Sipariş durumu güncellenirken hata: ", error));
+        }
     }
+
 
     // === ÜRÜNLER LİSTELEME BÖLÜMÜ (GÜNCELLENDİ: get() yerine onSnapshot() kullanılıyor) ===
     const producksTable = document.querySelector('#producks-table tbody');
@@ -70,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
             producksTable.innerHTML = '';
 
             if (querySnapshot.empty) {
-                producksTable.innerHTML = '<tr><td colspan="10">Henüz ürün eklenmemiş.</td></tr>';
+                producksTable.innerHTML = '<tr><td colspan="11">Henüz ürün eklenmemiş.</td></tr>';
                 console.log("Ürün koleksiyonu boş.");
                 return;
             }
@@ -82,6 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 producksTable.innerHTML += `
                     <tr>
                         <td>${i + 1}</td>
+                        <td>${produck.kategori || '-'}</td>
                         <td>${produck.isim || '-'}</td>
                         <td>${produck.fiyat !== undefined ? produck.fiyat.toLocaleString('tr-TR') + ' TL' : '-'}</td>
                         <td>${produck.stok !== undefined ? produck.stok : '-'}</td>
@@ -102,14 +159,15 @@ document.addEventListener('DOMContentLoaded', () => {
             producksTable.querySelectorAll('.sil-btn').forEach(button => {
                 button.onclick = function() {
                     const idToDelete = this.getAttribute('data-id');
-                    if (confirm(`'${this.closest('tr').cells[1].textContent}' isimli ürünü silmek istediğinize emin misiniz?`)) {
+                    // Ürün ismi için doğru hücre indeksi (kategori eklendikten sonra isim 3. hücrede, index 2)
+                    if (confirm(`'${this.closest('tr').cells[2].textContent}' isimli ürünü silmek istediğinize emin misiniz?`)) {
                         deleteProduck(idToDelete);
                     }
                 };
             });
 
         }, (error) => {
-            producksTable.innerHTML = '<tr><td colspan="10">Ürünler yüklenemedi. Bir hata oluştu.</td></tr>';
+            producksTable.innerHTML = '<tr><td colspan="11">Ürünler yüklenemedi. Bir hata oluştu.</td></tr>';
             console.error("Ürünleri yükleme hatası: ", error);
         });
 
@@ -132,9 +190,6 @@ document.addEventListener('DOMContentLoaded', () => {
         db.collection("producks").doc(id).delete()
             .then(() => {
                 console.log("Ürün başarıyla silindi:", id);
-                // onSnapshot zaten tabloyu güncelleyeceği için burada ek bir UI güncellemesine gerek yok.
-                // İsteğe bağlı olarak bir bildirim gösterilebilir:
-                // Örneğin bir toast mesajı veya alert("Ürün başarıyla silindi!");
             })
             .catch((error) => {
                 console.error("Ürün silinirken hata oluştu: ", error);
@@ -146,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // === ÜRÜN EKLEME BÖLÜMÜ ===
     const urunEkleForm = document.getElementById('urunEkleForm');
     if (urunEkleForm) {
-        const mesajElement = document.getElementById('mesaj'); // Bu form için mesaj elementi
+        const mesajElement = document.getElementById('mesaj');
         const submitButton = urunEkleForm.querySelector('button[type="submit"]');
 
         urunEkleForm.addEventListener('submit', function(e) {
@@ -157,7 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const fiyat = parseFloat(form.fiyat.value);
             const stok = parseInt(form.stok.value, 10);
 
-            if (mesajElement) mesajElement.innerHTML = ''; // Önceki mesajları temizle
+            if (mesajElement) mesajElement.innerHTML = '';
 
             if (!isim) {
                 if (mesajElement) mesajElement.innerHTML = '<span class="error">Ürün ismi boş bırakılamaz.</span>';
@@ -176,12 +231,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 isim: isim,
                 fiyat: fiyat,
                 stok: stok,
+                kategori: form.kategori.value.trim(),
                 barkod: form.barkod.value.trim(),
                 modelKodu: form.modelKodu.value.trim(),
                 stokKodu: form.stokKodu.value.trim(),
                 beden: form.beden.value.trim(),
                 renk: form.renk.value.trim(),
-                resim: form.resim.value.trim(), // Resim URL'si veya adı
+                resim: form.resim.value.trim(),
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             };
 
@@ -193,23 +249,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.log("Firestore ekleme başarılı! Doküman ID:", docRef.id);
                     if (mesajElement) mesajElement.innerHTML = '<span class="success">Ürün başarıyla eklendi! Ürünler sayfasına yönlendiriliyor...</span>';
                     setTimeout(() => {
-                        window.location.href = 'producks.html'; // Ürünler listeleme sayfasının adı
+                        window.location.href = 'producks.html';
                     }, 2000);
                 })
                 .catch((error) => {
                     console.error("Firebase'e ürün ekleme hatası: ", error);
                     if (mesajElement) mesajElement.innerHTML = `<span class="error">Ürün eklenirken bir hata oluştu! ${error.message}</span>`;
-                    if (submitButton) submitButton.disabled = false; // Hata durumunda butonu tekrar aktif et
+                    if (submitButton) submitButton.disabled = false;
                 });
-                // finally bloğuna gerek kalmadı, çünkü başarılı durumda yönlendirme var,
-                // hatalı durumda ise catch içinde butonu aktif ediyoruz.
         });
     }
 
     // === ÜRÜN DÜZENLEME BÖLÜMÜ ===
     const urunDuzenleForm = document.getElementById('urunDuzenleForm');
     if (urunDuzenleForm) {
-        const mesajElement = document.getElementById('mesaj'); // Bu form için mesaj elementi
+        const mesajElement = document.getElementById('mesaj');
         const urlParams = new URLSearchParams(window.location.search);
         const produckId = urlParams.get('id');
         const submitButton = urunDuzenleForm.querySelector('button[type="submit"]');
@@ -217,11 +271,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!produckId) {
             if (mesajElement) mesajElement.innerHTML = '<span class="error">Düzenlenecek ürün ID\'si bulunamadı. Lütfen ürünler listesinden gelin.</span>';
             if (submitButton) submitButton.disabled = true;
-            return; // produckId yoksa devam etme
+            return;
         }
 
         if (mesajElement) mesajElement.innerHTML = 'Ürün bilgileri yükleniyor...';
-        if (submitButton) submitButton.disabled = true; // Veri yüklenene kadar butonu devre dışı bırak
+        if (submitButton) submitButton.disabled = true;
 
         db.collection("producks").doc(produckId).get()
             .then((doc) => {
@@ -230,6 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     urunDuzenleForm.isim.value = mevcutUrun.isim || '';
                     urunDuzenleForm.fiyat.value = mevcutUrun.fiyat !== undefined ? mevcutUrun.fiyat : '';
                     urunDuzenleForm.stok.value = mevcutUrun.stok !== undefined ? mevcutUrun.stok : '';
+                    urunDuzenleForm.kategori.value = mevcutUrun.kategori || '';
                     urunDuzenleForm.barkod.value = mevcutUrun.barkod || '';
                     urunDuzenleForm.modelKodu.value = mevcutUrun.modelKodu || '';
                     urunDuzenleForm.stokKodu.value = mevcutUrun.stokKodu || '';
@@ -237,19 +292,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     urunDuzenleForm.renk.value = mevcutUrun.renk || '';
                     urunDuzenleForm.resim.value = mevcutUrun.resim || '';
                     if (mesajElement) mesajElement.innerHTML = '';
-                    if (submitButton) submitButton.disabled = false; // Veri yüklendi, butonu aktif et
+                    if (submitButton) submitButton.disabled = false;
                 } else {
                     if (mesajElement) mesajElement.innerHTML = '<span class="error">Ürün bulunamadı! ID geçersiz olabilir.</span>';
-                    // submitButton zaten true, tekrar disable etmeye gerek yok
                 }
             })
             .catch((error) => {
                 console.error("Ürün bilgilerini yükleme hatası: ", error);
                 if (mesajElement) mesajElement.innerHTML = `<span class="error">Ürün bilgileri yüklenemedi! Hata: ${error.message}</span>`;
-                // submitButton zaten true, tekrar disable etmeye gerek yok
             });
 
-        // Düzenlenmiş ürünü kaydetmek için form submit listener'ı
         urunDuzenleForm.addEventListener('submit', function(e) {
             e.preventDefault();
             const form = e.target;
@@ -258,7 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const fiyat = parseFloat(form.fiyat.value);
             const stok = parseInt(form.stok.value, 10);
 
-            if (mesajElement) mesajElement.innerHTML = ''; // Önceki mesajları temizle
+            if (mesajElement) mesajElement.innerHTML = '';
 
             if (!isim) {
                 if (mesajElement) mesajElement.innerHTML = '<span class="error">Ürün ismi boş bırakılamaz.</span>';
@@ -277,13 +329,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 isim: isim,
                 fiyat: fiyat,
                 stok: stok,
+                kategori: form.kategori.value.trim(),
                 barkod: form.barkod.value.trim(),
                 modelKodu: form.modelKodu.value.trim(),
                 stokKodu: form.stokKodu.value.trim(),
                 beden: form.beden.value.trim(),
                 renk: form.renk.value.trim(),
                 resim: form.resim.value.trim(),
-                updatedAt: firebase.firestore.FieldValue.serverTimestamp() // Güncellenme zamanı
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
             };
 
             if (submitButton) submitButton.disabled = true;
@@ -294,13 +347,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.log("Ürün başarıyla güncellendi! ID:", produckId);
                     if (mesajElement) mesajElement.innerHTML = '<span class="success">Ürün başarıyla güncellendi! Ürünler sayfasına yönlendiriliyor...</span>';
                     setTimeout(() => {
-                        window.location.href = 'producks.html'; // Ürünler listeleme sayfasının adı
+                        window.location.href = 'producks.html';
                     }, 2000);
                 })
                 .catch((error) => {
                     console.error("Firebase'e ürün güncelleme hatası: ", error);
                     if (mesajElement) mesajElement.innerHTML = `<span class="error">Ürün güncellenirken bir hata oluştu! ${error.message}</span>`;
-                    if (submitButton) submitButton.disabled = false; // Hata durumunda butonu tekrar aktif et
+                    if (submitButton) submitButton.disabled = false;
                 });
         });
     }
