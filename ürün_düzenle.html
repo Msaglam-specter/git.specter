@@ -42,6 +42,10 @@
             <label>İsim <input type="text" name="isim" required></label>
             <label>Fiyat <input type="text" name="fiyat" required></label>
             <label>Stok <input type="number" name="stok" required min="0"></label>
+            <div>
+              <label for="kategori">Kategori:</label>
+              <input type="text" id="kategori" name="kategori" placeholder="Örn: Giyim, Elektronik">
+            </div>
             <label>Barkod <input type="text" name="barkod"></label>
             <label>Model Kodu <input type="text" name="modelKodu"></label>
             <label>Stok Kodu <input type="text" name="stokKodu"></label>
@@ -52,6 +56,6 @@
             <div id="mesaj"></div>
         </form>
     </main>
-   <script src="app.js"></script>
+   <script defer src="app.js"></script>
 </body>
 </html>
