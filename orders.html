@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SİPARİŞLER- SPECTER</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Firebase App (Çekirdek) SDK -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <!-- Firebase Firestore SDK -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+   <!-- Firebase App (core Firebase SDK) her zaman gereklidir ve ilk sırada listelenmelidir -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <!-- Kullanmak istediğiniz Firebase ürünlerini ekleyin -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
     <!-- Firebase Yapılandırması ve Başlatma -->
     <script>
@@ -22,8 +22,17 @@
         appId: "1:974606404880:web:9c4f52286c409b1c42a995"
       };
       // Firebase'i başlat
-      firebase.initializeApp(firebaseConfig);
-    </script>
+ // Bu kontrol, sayfanın birden çok kez yüklenmesi durumunda hata vermesini engeller
+        if (!firebase.apps.length) {
+           firebase.initializeApp(firebaseConfig);
+           console.log("Firebase başarıyla başlatıldı!"); // Konsola yazdırıp kontrol edebiliriz
+        } else {
+           console.log("Firebase zaten başlatılmıştı.");
+        }
+        // Firestore veritabanı servisine erişmek için bir referans oluşturun
+        const db = firebase.firestore();
+        console.log("Firestore 'db' objesi kullanıma hazır."); // Konsola yazdırıp kontrol edebiliriz
+        </script>
 </head>
 <body>
     <header>
@@ -50,10 +59,11 @@
                     <th>Adet</th>
                     <th>Toplam Tutar</th>
                     <th>Adres</th>
-                </tr>
+                </tr> <th>Durum</th>
+                    <th>Aksiyonlar</th>
             </thead>
             <tbody>
-                <!-- Siparişler buraya gelecek -->
+                <!-- Sipariş verileri buraya dinamik olarak eklenecek -->              
             </tbody>
         </table>
     </section>
