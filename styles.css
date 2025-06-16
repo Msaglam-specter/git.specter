@@ -2,8 +2,10 @@
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     margin: 0;
-    padding: 0;
-    padding-bottom: 70px; /* Sabit footer için altta boşluk */
+   /* Sabit header ve footer için body'ye padding ekleniyor */
+    /* Bu değerler header ve footer'ınızın gerçek yüksekliğine göre ayarlanmalıdır */
+    padding-top: 120px; /* Sabit header için üstte boşluk (header yüksekliğine göre ayarlayın) */
+    padding-bottom: 70px; /* Sabit footer için altta boşluk (footer yüksekliğine göre ayarlayın) */
 }
 
 header {
@@ -11,12 +13,26 @@ header {
     color: #ffffff;
     padding: 20px 0;
     text-align: center;
+    position: fixed; /* Header'ı sabitler */
+    top: 0;          /* Sayfanın en üstüne sabitler */
+    left: 0;         /* Soldan hizalar */
+    width: 100%;     /* Tam genişlik */
+    z-index: 1000;   /* Diğer elementlerin üzerinde kalmasını sağlar */
+    box-sizing: border-box; /* Padding ve border'ı genişliğe dahil eder */
 }
 
 nav {
-    background: #35424a;
-    color: #ffffff;
     padding: 10px 0;
+}
+main {
+    /* Header ve footer sabitlendiği için main içeriğinin
+       bunların altına girmemesi için ek bir ayar gerekebilir.
+       Body'ye eklenen padding-top ve padding-bottom bu işi görmeli.
+       Eğer main içeriği yine de header/footer altına giriyorsa,
+       main'e margin-top/bottom eklenebilir veya body padding'leri artırılabilir.
+       Şimdilik body padding'lerinin yeterli olduğunu varsayıyoruz. */
+    width: 100%; /* Main içeriğinin de tam genişlikte olmasını sağlar */
+    box-sizing: border-box;
 }
 
 nav ul {
@@ -92,6 +108,7 @@ footer {
     overflow-x: auto;
     width: 100%;
     margin-bottom: 20px; /* Tablo altında boşluk */
+    margin-left: 15px; /* Tabloya sol boşluk */     margin-right: 15px; /* Tabloya sağ boşluk */
     background: #fff; /* Arka planı tablo ile aynı yapabiliriz */
     border-radius: 5px; /* İsteğe bağlı: Köşeleri yuvarlatma */
 }
@@ -135,7 +152,8 @@ button {
     background: #222;
     color: #fff;
     border: none;
-border-radius: 5px;    font-size: 16px;
+    border-radius: 5px;    
+    font-size: 16px;
     cursor: pointer;
 }
 button:hover {
@@ -155,6 +173,8 @@ button:hover {
     padding: 15px;
     background-color: #f9f9f9;
     border-radius: 5px;
+    margin-left: 15px; /* Kontrol konteynerine sol boşluk */
+    margin-right: 15px; /* Kontrol konteynerine sağ boşluk */
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 .controls-container .title-add-button-row {
@@ -198,7 +218,11 @@ button:hover {
     nav ul li {
         margin: 8px 0;
     }
-
+    body {
+        /* Mobil cihazlarda header yüksekliği değişebileceği için padding-top'ı ayarlayabilirsiniz */
+        /* Örneğin, nav dikey olduğunda header daha yüksek olabilir */
+        padding-top: 100px; /* Örnek bir değer, test ederek ayarlayın */
+    }
     .controls-container .title-add-button-row {
         flex-direction: column;
         align-items: stretch; /* Başlık ve butonu tam genişlik yapar */
@@ -222,6 +246,12 @@ button:hover {
 
     form {
         width: 90%; /* Formu ekranın %90'ı yapar */
+    }
+    .controls-container,
+    .table-responsive-wrapper {
+        margin-left: 0; /* Küçük ekranlarda sol boşluğu kaldır */
+        margin-right: 0; /* Küçük ekranlarda sağ boşluğu kaldır */
+        border-radius: 0; /* İsteğe bağlı: Köşeleri düz yap */
     }
 }
 
