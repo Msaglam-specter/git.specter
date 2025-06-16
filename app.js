@@ -1,9 +1,8 @@
-﻿/* 15.06.2025(14:31)*/
-// Firestore 'db' referansının HTML içinde global olarak tanımlandığı varsayılıyor
-// Eğer 'db' global değilse, DOMContentLoaded içinde tanımlanması gerekebilir.
-
+﻿/* 16.06.2025 (18:20) */
 document.addEventListener('DOMContentLoaded', () => {
     // Firebase Firestore referansını burada tanımlayın
+    // Bu, HTML dosyalarında Firebase SDK'ları ve firebaseConfig yüklendikten sonra
+    // global `firebase` objesinin mevcut olduğu varsayımına dayanır.
     const db = firebase.firestore();
 
     // === SİPARİŞLER BÖLÜMÜ ===
@@ -116,60 +115,141 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    // === ÜRÜNLER LİSTELEME BÖLÜMÜ (GÜNCELLENDİ: get() yerine onSnapshot() kullanılıyor) ===
-    const producksTable = document.querySelector('#producks-table tbody');
+    // === ÜRÜNLER LİSTELEME, FİLTRELEME, SIRALAMA VE SİLME BÖLÜMÜ ===
+    const producksTableBody = document.querySelector('#producks-table tbody');
+    const searchInput = document.getElementById('searchInput');
+    const sortOptions = document.getElementById('sortOptions');
+    const noResultsMessage = document.getElementById('noResultsMessage');
+
+    let allProducts = []; // Firestore'dan çekilen tüm ürünler
     let unsubscribeProducks = null; // Dinleyiciyi durdurmak için referans
 
-    if (producksTable) {
-        unsubscribeProducks = db.collection("producks").orderBy("createdAt", "desc").onSnapshot((querySnapshot) => {
-            console.log("Firestore'dan ürünler güncellendi. Toplam ürün:", querySnapshot.size);
-            producksTable.innerHTML = '';
+    function renderProducksTable(productsToRender) {
+        if (!producksTableBody) return;
+        producksTableBody.innerHTML = ''; // Önce temizle
 
-            if (querySnapshot.empty) {
-                producksTable.innerHTML = '<tr><td colspan="11">Henüz ürün eklenmemiş.</td></tr>';
-                console.log("Ürün koleksiyonu boş.");
-                return;
-            }
+        if (productsToRender.length === 0) {
+            if (noResultsMessage) noResultsMessage.style.display = 'block';
+        } else {
+            if (noResultsMessage) noResultsMessage.style.display = 'none';
+        }
 
-            let i = 0;
-            querySnapshot.forEach((doc) => {
-                const produck = doc.data();
-                const produckId = doc.id;
-                producksTable.innerHTML += `
-                    <tr>
-                        <td>${i + 1}</td>
-                        <td>${produck.kategori || '-'}</td>
-                        <td>${produck.isim || '-'}</td>
-                        <td>${produck.fiyat !== undefined ? produck.fiyat.toLocaleString('tr-TR') + ' TL' : '-'}</td>
-                        <td>${produck.stok !== undefined ? produck.stok : '-'}</td>
-                        <td>${produck.barkod || '-'}</td>
-                        <td>${produck.modelKodu || '-'}</td>
-                        <td>${produck.stokKodu || '-'}</td>
-                        <td>${produck.beden || '-'}</td>
-                        <td>${produck.renk || '-'}</td>
-                        <td>
-                            <a href="ürün_düzenle.html?id=${produckId}" class="btn" style="padding:4px 10px;font-size:14px;">Düzenle</a>
-                            <button class="btn btn-danger sil-btn" data-id="${produckId}" style="padding:4px 10px;font-size:14px; margin-left: 5px;">Sil</button>
-                        </td>
-                    </tr>
-                `;
-                i++;
-            });
-
-            producksTable.querySelectorAll('.sil-btn').forEach(button => {
-                button.onclick = function() {
-                    const idToDelete = this.getAttribute('data-id');
-                    // Ürün ismi için doğru hücre indeksi (kategori eklendikten sonra isim 3. hücrede, index 2)
-                    if (confirm(`'${this.closest('tr').cells[2].textContent}' isimli ürünü silmek istediğinize emin misiniz?`)) {
-                        deleteProduck(idToDelete);
-                    }
-                };
-            });
-
-        }, (error) => {
-            producksTable.innerHTML = '<tr><td colspan="11">Ürünler yüklenemedi. Bir hata oluştu.</td></tr>';
-            console.error("Ürünleri yükleme hatası: ", error);
+        productsToRender.forEach((produckData, index) => {
+            const produck = produckData.data; // Asıl ürün verisi
+            const produckId = produckData.id;  // Ürün ID'si
+            const row = producksTableBody.insertRow();
+            row.insertCell().textContent = index + 1;
+            row.insertCell().textContent = produck.kategori || '-';
+            row.insertCell().textContent = produck.isim || '-';
+            row.insertCell().textContent = produck.fiyat !== undefined ? produck.fiyat.toLocaleString('tr-TR') + ' TL' : '-';
+            row.insertCell().textContent = produck.stok !== undefined ? produck.stok : '-';
+            row.insertCell().textContent = produck.barkod || '-';
+            row.insertCell().textContent = produck.modelKodu || '-';
+            row.insertCell().textContent = produck.stokKodu || '-';
+            row.insertCell().textContent = produck.beden || '-';
+            row.insertCell().textContent = produck.renk || '-';
+            const actionsCell = row.insertCell();
+            actionsCell.innerHTML = `
+                <a href="ürün_düzenle.html?id=${produckId}" class="btn" style="padding:4px 10px;font-size:14px;">Düzenle</a>
+                <button class="btn btn-danger sil-btn" data-id="${produckId}" style="padding:4px 10px;font-size:14px; margin-left: 5px;">Sil</button>
+            `;
         });
+
+        // Silme butonlarına event listener'ları yeniden ata
+        producksTableBody.querySelectorAll('.sil-btn').forEach(button => {
+            button.onclick = function() {
+                const idToDelete = this.getAttribute('data-id');
+                const productName = this.closest('tr').cells[2].textContent; // İsim hücresi (Kategori eklendiği için index 2)
+                if (confirm(`'${productName}' isimli ürünü silmek istediğinize emin misiniz?`)) {
+                    deleteProduck(idToDelete);
+                }
+            };
+        });
+    }
+
+    function displayFilteredAndSortedProducts() {
+        if (!producksTableBody) return; // Eğer tablo body yoksa (başka sayfadaysak) işlem yapma
+
+        // Henüz ürün yoksa ve filtre/sıralama yoksa özel mesaj göster
+        if (allProducts.length === 0 && (!searchInput || searchInput.value === '') && (!sortOptions || sortOptions.value === 'default')) {
+            renderProducksTable([]); // Boş tabloyu render et (noResultsMessage'ı tetikleyebilir)
+            if (producksTableBody && allProducts.length === 0 && (!searchInput || !searchInput.value)) {
+                 producksTableBody.innerHTML = '<tr><td colspan="11">Henüz ürün eklenmemiş.</td></tr>';
+                 if (noResultsMessage) noResultsMessage.style.display = 'none';
+            }
+            return;
+        }
+
+        let filteredProducts = [...allProducts];
+        const searchTerm = (searchInput && searchInput.value) ? searchInput.value.toLowerCase().trim() : '';
+
+        if (searchTerm) {
+            filteredProducts = allProducts.filter(p => {
+                const product = p.data;
+                return (
+                    (product.isim && product.isim.toLowerCase().includes(searchTerm)) ||
+                    (product.kategori && product.kategori.toLowerCase().includes(searchTerm)) ||
+                    (product.barkod && product.barkod.toLowerCase().includes(searchTerm)) ||
+                    (product.modelKodu && product.modelKodu.toLowerCase().includes(searchTerm)) ||
+                    (product.stokKodu && product.stokKodu.toLowerCase().includes(searchTerm)) ||
+                    (product.beden && product.beden.toLowerCase().includes(searchTerm)) ||
+                    (product.renk && product.renk.toLowerCase().includes(searchTerm))
+                );
+            });
+        }
+
+        const sortCriteria = (sortOptions && sortOptions.value) ? sortOptions.value : 'default';
+        switch (sortCriteria) {
+            case 'date-desc':
+            default: // Varsayılan olarak createdAt'a göre tersten sırala
+                filteredProducts.sort((a, b) => (b.data.createdAt?.seconds || 0) - (a.data.createdAt?.seconds || 0));
+                break;
+            case 'date-asc':
+                filteredProducts.sort((a, b) => (a.data.createdAt?.seconds || 0) - (b.data.createdAt?.seconds || 0));
+                break;
+            case 'name-asc':
+                filteredProducts.sort((a, b) => (a.data.isim || '').localeCompare(b.data.isim || ''));
+                break;
+            case 'name-desc':
+                filteredProducts.sort((a, b) => (b.data.isim || '').localeCompare(a.data.isim || ''));
+                break;
+            case 'price-asc':
+                filteredProducts.sort((a, b) => (parseFloat(a.data.fiyat) || 0) - (parseFloat(b.data.fiyat) || 0));
+                break;
+            case 'price-desc':
+                filteredProducts.sort((a, b) => (parseFloat(b.data.fiyat) || 0) - (parseFloat(a.data.fiyat) || 0));
+                break;
+            case 'stock-asc':
+                filteredProducts.sort((a, b) => (parseInt(a.data.stok) || 0) - (parseInt(b.data.stok) || 0));
+                break;
+            case 'stock-desc':
+                filteredProducts.sort((a, b) => (parseInt(b.data.stok) || 0) - (parseInt(a.data.stok) || 0));
+                break;
+            case 'category-asc':
+                filteredProducts.sort((a, b) => (a.data.kategori || '').localeCompare(b.data.kategori || ''));
+                break;
+            case 'category-desc':
+                filteredProducts.sort((a, b) => (b.data.kategori || '').localeCompare(a.data.kategori || ''));
+                break;
+        }
+        renderProducksTable(filteredProducts);
+    }
+
+    if (producksTableBody) { // Sadece ürünler sayfasındaysak bu işlemleri yap
+        unsubscribeProducks = db.collection("producks")
+                                .orderBy("createdAt", "desc") // Varsayılan sıralama
+                                .onSnapshot((querySnapshot) => {
+            console.log("Firestore'dan ürünler güncellendi. Toplam ürün:", querySnapshot.size);
+            allProducts = querySnapshot.docs.map(doc => ({ id: doc.id, data: doc.data() }));
+            displayFilteredAndSortedProducts(); // Filtreleme ve sıralamayı uygula
+        }, (error) => {
+            if (producksTableBody) producksTableBody.innerHTML = '<tr><td colspan="11">Ürünler yüklenemedi. Bir hata oluştu.</td></tr>';
+            console.error("Ürünleri yükleme hatası: ", error);
+            if (noResultsMessage) noResultsMessage.style.display = 'none';
+        });
+
+        if (searchInput) searchInput.addEventListener('input', displayFilteredAndSortedProducts);
+        if (sortOptions) sortOptions.addEventListener('change', displayFilteredAndSortedProducts);
 
         // Sayfa kapatıldığında veya değiştirildiğinde dinleyiciyi durdur
         window.addEventListener('beforeunload', () => {
@@ -190,6 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
         db.collection("producks").doc(id).delete()
             .then(() => {
                 console.log("Ürün başarıyla silindi:", id);
+                // Tablo otomatik olarak onSnapshot ile güncellenecektir.
             })
             .catch((error) => {
                 console.error("Ürün silinirken hata oluştu: ", error);
@@ -238,7 +319,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 beden: form.beden.value.trim(),
                 renk: form.renk.value.trim(),
                 resim: form.resim.value.trim(),
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                createdAt: firebase.firestore.FieldValue.serverTimestamp() // Eklenme zamanı
             };
 
             if (submitButton) submitButton.disabled = true;
@@ -271,7 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!produckId) {
             if (mesajElement) mesajElement.innerHTML = '<span class="error">Düzenlenecek ürün ID\'si bulunamadı. Lütfen ürünler listesinden gelin.</span>';
             if (submitButton) submitButton.disabled = true;
-            return;
+            return; // ID yoksa formu işlemeye devam etme
         }
 
         if (mesajElement) mesajElement.innerHTML = 'Ürün bilgileri yükleniyor...';
@@ -336,7 +417,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 beden: form.beden.value.trim(),
                 renk: form.renk.value.trim(),
                 resim: form.resim.value.trim(),
-                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp() // Güncellenme zamanı
             };
 
             if (submitButton) submitButton.disabled = true;
