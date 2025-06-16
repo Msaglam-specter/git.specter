@@ -40,13 +40,45 @@
                 <li><a href="settings.html">Ayarlar</a></li>
             </ul>
         </nav>
-    </header>
+   ,
+                </header>
    <main>
     <section id="producks">
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-            
-            <a href="ürün_ekle.html" class="btn" style="padding:8px 18px;background:#222;color:#fff;border-radius:5px;text-decoration:none;">Ürün Ekle</a>
-        </div><h2 style="text-align: center;">Ürünler</h2>
+        <div class="controls-container" style="margin-bottom: 20px; padding: 15px; background-color: #f9f9f9; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <h2 style="text-align: center; margin:0; flex-grow: 1;">Ürünler</h2>
+                <a href="ürün_ekle.html" class="btn" style="padding:8px 18px;background:#222;color:#fff;border-radius:5px;text-decoration:none;">Ürün Ekle</a>
+            </div>
+            <div style="display:flex; gap: 20px; align-items: flex-end; flex-wrap: wrap;">
+                <div>
+                    <label for="searchInput" style="display:block; margin-bottom:5px; font-weight:bold;">Filtrele:</label>
+                    <input type="text" id="searchInput" placeholder="Arama yapın (isim, barkod, kategori vb.)" style="padding: 8px; border-radius:4px; border:1px solid #ccc; width: 250px;">
+                </div>
+                <div>
+                    <label for="sortOptions" style="display:block; margin-bottom:5px; font-weight:bold;">Sırala:</label>
+                    <select id="sortOptions" style="padding: 8px; border-radius:4px; border:1px solid #ccc; width: 200px;">
+                        <option value="default">Varsayılan</option>
+                        <option value="date-desc">Eklenme Tarihi (Yeniden Eskiye)</option>
+                        <option value="date-asc">Eklenme Tarihi (Eskiden Yeniye)</option>
+                        <option value="name-asc">İsim (A-Z)</option>
+                        <option value="name-desc">İsim (Z-A)</option>
+                        <option value="price-asc">Fiyat (Artan)</option>
+                        <option value="price-desc">Fiyat (Azalan)</option>
+                        <option value="stock-asc">Stok (Artan)</option>
+                        <option value="stock-desc">Stok (Azalan)</option>
+                        <option value="category-asc">Kategori (A-Z)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div id="noResultsMessage" style="text-align:center; margin:20px; color: #777; display:none;">
+            <p>Aramanızla eşleşen ürün bulunamadı.</p>
+        </div>
+         <table id="producks-table">
+             <thead>
+                 <tr>
+
+
+
         <table id="producks-table">
             <thead>
                 <tr>
