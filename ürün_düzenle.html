@@ -4,7 +4,34 @@
     <meta charset="UTF-8">
     <title>Ürün Düzenle - SPECTER</title>
     <link rel="stylesheet" href="styles.css">
+<script>
+        // Bu object, sizin Firebase projenizin kimlik bilgileridir.
+        // Firebase Konsolundan aldığınız kod BUDUR.
+        const firebaseConfig = {
+          apiKey: "AIzaSyBxGu7lw0w8fvsLYPVyBMBeTkwneBrllyA", // <-- Sizin API Anahtarınız
+          authDomain: "git-specter-admin-paneli.firebaseapp.com", // <-- Sizin Yetkilendirme Alanınız
+          projectId: "git-specter-admin-paneli", // <-- Sizin Proje ID'niz
+          storageBucket: "git-specter-admin-paneli.firebasestorage.app", // <-- Sizin Storage Alanınız
+          messagingSenderId: "974606404880", // <-- Sizin Mesajlaşma Gönderici ID'niz
+          appId: "1:974606404880:web:9c4f52286c409b1c42a995", // <-- Sizin Uygulama ID'niz
+          measurementId: "G-CDRTPJ7C9Y" // <-- Analytics kullanıyorsanız bu kalsın, yoksa silebilirsiniz
+        };
 
+        // Firebase Uygulamasını Başlat
+        // Bu kontrol, sayfanın birden çok kez yüklenmesi durumunda hata vermesini engeller
+        if (!firebase.apps.length) {
+           firebase.initializeApp(firebaseConfig);
+           console.log("Firebase başarıyla başlatıldı!"); // Konsola yazdırıp kontrol edebiliriz
+        } else {
+           console.log("Firebase zaten başlatılmıştı.");
+        }
+
+        // Firestore veritabanı servisine erişmek için bir referans oluşturun
+        // Bu 'db' değişkeni artık bu scriptten sonra yüklenen tüm kodlarda (yani app.js'de) kullanılabilir.
+        const db = firebase.firestore();
+        console.log("Firestore 'db' objesi kullanıma hazır."); // Konsola yazdırıp kontrol edebiliriz
+
+    </script>
 </head>
 <body>
     <header>
