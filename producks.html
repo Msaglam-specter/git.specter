@@ -6,9 +6,9 @@
     <title>ÜRÜNLER - SPECTER</title>
     <link rel="stylesheet" href="styles.css">
   <!-- Firebase App (Çekirdek) SDK -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
     <!-- Firebase Firestore SDK -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
     <!-- İhtiyaç duyulan diğer Firebase SDK'ları (Auth, Storage vb.) buraya eklenebilir -->
 
     <!-- Firebase Yapılandırması ve Başlatma -->
@@ -73,30 +73,30 @@
         <div id="noResultsMessage" style="text-align:center; margin:20px; color: #777; display:none;">
             <p>Aramanızla eşleşen ürün bulunamadı.</p>
         </div>
-         <table id="producks-table">
-             <thead>
-                 <tr>
-
-
-
+        
         <table id="producks-table">
             <thead>
                 <tr>
                     <th>#</th>
+                    <th>Kategori</th>
                     <th>İsim</th>
                     <th>Fiyat</th>
                     <th>Stok</th>
-                    <th>Kategori</th>
                     <th>Barkod</th>
                     <th>Model Kodu</th>
                     <th>Stok Kodu</th>
                     <th>Beden</th>
                     <th>Renk</th>
+                    <th>Aksiyonlar</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- Ürünler buraya gelecek -->
-            </tbody>
+            <th>Adet</th>
+                    <th>Toplam Tutar</th>
+                    <th>Adres</th>
+                    <th>Durum</th>
++                    <th>Aksiyonlar</th>
+            </tr></tbody>
         </table>
     </section>
 </main>
