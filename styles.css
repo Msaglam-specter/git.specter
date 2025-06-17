@@ -259,7 +259,7 @@ button:hover {
     }
 }
 
-@media (max-width: 150px) { /* Mobil telefonlar */
+@media (max-width: 50px) { /* Mobil telefonlar */
     body {
         font-size: 14px; /* Daha küçük ekranlar için temel font boyutu */
     }
