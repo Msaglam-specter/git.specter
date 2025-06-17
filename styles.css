@@ -236,10 +236,10 @@ button:hover {
     .controls-container .filter-sort-row {
         /* .controls-container .filter-sort-row için flex-direction: column kaldırıldı. */
     /* Artık flex-wrap: wrap; doğal davranışı ile sığmadığında alt alta geçecek. */
-    .controls-container .filter-sort-row { /* align-items: stretch; hala faydalı olabilir */
+      /* align-items: stretch; hala faydalı olabilir */
        align-items: stretch;
         gap: 10px;
-    }
+   }
     .controls-container .filter-sort-row > div { /* Filtre ve Sıralama div'leri */
         width: 100%;
     }
