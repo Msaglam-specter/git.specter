@@ -8,7 +8,7 @@
     padding-bottom: 70px; /* Sabit footer için altta boşluk (footer yüksekliğine göre ayarlayın) */
     min-height: 100vh; /* Body'nin en az ekran yüksekliği kadar olmasını sağlar */
     display: flex; /* Body'yi flex container yapar */
-    flex-direction: wrap; /* Ana ekseni dikey yapar */
+    flex-direction: column; /* Ana ekseni dikey yapar */
 }
 
 header {
@@ -225,13 +225,11 @@ button:hover {
     body {
         /* Mobil cihazlarda header yüksekliği değişebileceği için padding-top'ı ayarlayabilirsiniz */
         /* Örneğin, nav dikey olduğunda header daha yüksek olabilir */
-        padding-top: 50px; /* Örnek bir değer, test ederek ayarlayın */
+        padding-top: auto; /* Örnek bir değer, test ederek ayarlayın */
     }
     .controls-container .title-add-button-row {
         flex-direction: column;
         align-items: stretch; /* Başlık ve butonu tam genişlik yapar */
-    }
-    .controls-container .title-add-button-row .btn {
         margin-top: 10px;
         text-align: center;
     }
@@ -239,8 +237,8 @@ button:hover {
         /* .controls-container .filter-sort-row için flex-direction: column kaldırıldı. */
     /* Artık flex-wrap: wrap; doğal davranışı ile sığmadığında alt alta geçecek. */
     .controls-container .filter-sort-row { /* align-items: stretch; hala faydalı olabilir */
-        align-items: stretch; 
-        gap: 10px;gap: 10px;
+       align-items: stretch;
+        gap: 10px;
     }
     .controls-container .filter-sort-row > div { /* Filtre ve Sıralama div'leri */
         width: 100%;
