@@ -8,7 +8,7 @@
     padding-bottom: 70px; /* Sabit footer için altta boşluk (footer yüksekliğine göre ayarlayın) */
     min-height: 100vh; /* Body'nin en az ekran yüksekliği kadar olmasını sağlar */
     display: flex; /* Body'yi flex container yapar */
-    flex-direction: column; /* Ana ekseni dikey yapar */
+    flex-direction: wrap; /* Ana ekseni dikey yapar */
 }
 
 header {
