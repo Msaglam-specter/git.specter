@@ -225,7 +225,7 @@ button:hover {
     body {
         /* Mobil cihazlarda header yüksekliği değişebileceği için padding-top'ı ayarlayabilirsiniz */
         /* Örneğin, nav dikey olduğunda header daha yüksek olabilir */
-        padding-top: auto; /* Örnek bir değer, test ederek ayarlayın */
+        padding-top: 50px; /* Örnek bir değer, test ederek ayarlayın */
     }
     .controls-container .title-add-button-row {
         flex-direction: column;
