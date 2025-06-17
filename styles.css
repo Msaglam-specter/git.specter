@@ -6,6 +6,9 @@
     /* Bu değerler header ve footer'ınızın gerçek yüksekliğine göre ayarlanmalıdır */
     padding-top: 120px; /* Sabit header için üstte boşluk (header yüksekliğine göre ayarlayın) */
     padding-bottom: 70px; /* Sabit footer için altta boşluk (footer yüksekliğine göre ayarlayın) */
+    min-height: 100vh; /* Body'nin en az ekran yüksekliği kadar olmasını sağlar */
+    display: flex; /* Body'yi flex container yapar */
+    flex-direction: column; /* Ana ekseni dikey yapar */
 }
 
 header {
@@ -33,7 +36,8 @@ main {
        Şimdilik body padding'lerinin yeterli olduğunu varsayıyoruz. */
     width: 100%; /* Main içeriğinin de tam genişlikte olmasını sağlar */
     box-sizing: border-box;
-}
+    flex-grow: 1; /* Main'in mevcut boş alanı doldurmasını sağlar */
+} 
 
 nav ul {
     list-style: none;
@@ -232,9 +236,11 @@ button:hover {
         text-align: center;
     }
     .controls-container .filter-sort-row {
-        flex-direction: column;
-        align-items: stretch; /* Filtre/Sıralama bloklarını tam genişlik yapar */
-        gap: 10px;
+        /* .controls-container .filter-sort-row için flex-direction: column kaldırıldı. */
+    /* Artık flex-wrap: wrap; doğal davranışı ile sığmadığında alt alta geçecek. */
+    .controls-container .filter-sort-row { /* align-items: stretch; hala faydalı olabilir */
+        align-items: stretch; 
+        gap: 10px;gap: 10px;
     }
     .controls-container .filter-sort-row > div { /* Filtre ve Sıralama div'leri */
         width: 100%;
@@ -262,4 +268,5 @@ button:hover {
     header h1 {
         font-size: 1.5em;
     }
+}
 }
