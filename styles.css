@@ -211,7 +211,7 @@ button:hover {
 }
 
 /* Responsive Ayarlamalar */
-@media (max-width: 768px) { /* Tabletler ve altı */
+@media (max-width: 600px) { /* Tabletler ve altı */
     header h1 {
         font-size: 1.8em;
     }
